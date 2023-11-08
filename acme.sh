@@ -335,6 +335,7 @@ switch_provider(){
 
 menu() {
     clear
+    echo -e 
     echo -e "----------Acme 证书一键申请脚本----------"
     echo -e 
     echo -e " ${GREEN}1.${PLAIN} 安装 Acme.sh 域名证书申请脚本"
