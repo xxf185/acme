@@ -335,29 +335,17 @@ switch_provider(){
 
 menu() {
     clear
-    echo "#############################################################"
-    echo -e "#                   ${RED}Acme  证书一键申请脚本${PLAIN}                  #"
-    echo -e "# ${GREEN}作者${PLAIN}: MisakaNo の 小破站                                  #"
-    echo -e "# ${GREEN}博客${PLAIN}: https://blog.misaka.rest                            #"
-    echo -e "# ${GREEN}GitHub 项目${PLAIN}: https://github.com/Misaka-blog               #"
-    echo -e "# ${GREEN}GitLab 项目${PLAIN}: https://gitlab.com/Misaka-blog               #"
-    echo -e "# ${GREEN}Telegram 频道${PLAIN}: https://t.me/misakanocchannel              #"
-    echo -e "# ${GREEN}Telegram 群组${PLAIN}: https://t.me/misakanoc                     #"
-    echo -e "# ${GREEN}YouTube 频道${PLAIN}: https://www.youtube.com/@misaka-blog        #"
-    echo "#############################################################"
-    echo ""
+    echo -e "----------Acme 证书一键申请脚本----------"
+    echo -e 
     echo -e " ${GREEN}1.${PLAIN} 安装 Acme.sh 域名证书申请脚本"
     echo -e " ${GREEN}2.${PLAIN} ${RED}卸载 Acme.sh 域名证书申请脚本${PLAIN}"
-    echo " -------------"
     echo -e " ${GREEN}3.${PLAIN} 申请单域名证书 ${YELLOW}(80端口申请)${PLAIN}"
     echo -e " ${GREEN}4.${PLAIN} 申请单域名证书 ${YELLOW}(CF API申请)${PLAIN} ${GREEN}(无需解析)${PLAIN} ${RED}(不支持freenom域名)${PLAIN}"
     echo -e " ${GREEN}5.${PLAIN} 申请泛域名证书 ${YELLOW}(CF API申请)${PLAIN} ${GREEN}(无需解析)${PLAIN} ${RED}(不支持freenom域名)${PLAIN}"
-    echo " -------------"
     echo -e " ${GREEN}6.${PLAIN} 查看已申请的证书"
     echo -e " ${GREEN}7.${PLAIN} 撤销并删除已申请的证书"
     echo -e " ${GREEN}8.${PLAIN} 手动续期已申请的证书"
     echo -e " ${GREEN}9.${PLAIN} 切换证书颁发机构"
-    echo " -------------"
     echo -e " ${GREEN}0.${PLAIN} 退出脚本"
     echo ""
     read -rp "请输入选项 [0-9]: " menuInput
