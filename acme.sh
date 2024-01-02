@@ -174,15 +174,15 @@ acme_standalone(){
     check_ip
     
     echo ""
-    yellow "在使用80端口申请模式时, 请先将您的域名解析至你的VPS的真实IP地址, 否则会导致证书申请失败"
+    yellow "在使用 80 端口申请模式时, 请先将您的域名解析至你的 VPS 的真实 IP 地址, 否则会导致证书申请失败"
     echo ""
     if [[ -n $ipv4 && -n $ipv6 ]]; then
-        echo -e "VPS的真实IPv4地址为: ${GREEN}$ipv4${PLAIN}"
-        echo -e "VPS的真实IPv6地址为: ${GREEN}$ipv6${PLAIN}"
+        echo -e "VPS 的真实 IPv4 地址为: ${GREEN}$ipv4${PLAIN}"
+        echo -e "VPS 的真实 IPv6 地址为: ${GREEN}$ipv6${PLAIN}"
     elif [[ -n $ipv4 && -z $ipv6 ]]; then
-        echo -e "VPS的真实IPv4地址为: ${GREEN}$ipv4${PLAIN}"
+        echo -e "VPS 的真实 IPv4 地址为: ${GREEN}$ipv4${PLAIN}"
     elif [[ -z $ipv4 && -n $ipv6 ]]; then
-        echo -e "VPS的真实IPv6地址为: ${GREEN}$ipv6${PLAIN}"
+        echo -e "VPS 的真实 IPv6 地址为: ${GREEN}$ipv6${PLAIN}"
     fi
     echo ""
 
@@ -190,7 +190,23 @@ acme_standalone(){
     [[ -z $domain ]] && red "未输入域名，无法执行操作！" && exit 1
     green "已输入的域名：$domain" && sleep 1
 
-    domainIP=$(curl -sm8 ipget.net/?ip="${domain}")
+    domainIP=$(dig @8.8.8.8 +time=2 +short "$domain" 2>/dev/null)
+    if echo $domainIP | grep -q "network unreachable\|timed out" || [[ -z $domainIP ]]; then
+        domainIP=$(dig @2001:4860:4860::8888 +time=2 aaaa +short "$domain" 2>/dev/null)
+    fi
+    if echo $domainIP | grep -q "network unreachable\|timed out" || [[ -z $domainIP ]] ; then
+        red "未解析出 IP，请检查域名是否输入有误" 
+        yellow "是否尝试强行匹配？"
+        green "1. 是，将使用强行匹配"
+        green "2. 否，退出脚本"
+        read -p "请输入选项 [1-2]：" ipChoice
+        if [[ $ipChoice == 1 ]]; then
+            yellow "将尝试强行匹配以申请域名证书"
+        else
+            red "将退出脚本"
+            exit 1
+        fi
+    fi
     
     if [[ $domainIP == $ipv6 ]]; then
         bash ~/.acme.sh/acme.sh --issue -d ${domain} --standalone -k ec-256 --listen-v6 --insecure
@@ -335,18 +351,29 @@ switch_provider(){
 
 menu() {
     clear
-    echo -e 
-    echo -e "----------Acme 证书一键申请脚本----------"
-    echo -e 
+    echo "#############################################################"
+    echo -e "#                   ${RED}Acme  证书一键申请脚本${PLAIN}                  #"
+    echo -e "# ${GREEN}作者${PLAIN}: MisakaNo の 小破站                                  #"
+    echo -e "# ${GREEN}博客${PLAIN}: https://blog.misaka.rest                            #"
+    echo -e "# ${GREEN}GitHub 项目${PLAIN}: https://github.com/Misaka-blog               #"
+    echo -e "# ${GREEN}GitLab 项目${PLAIN}: https://gitlab.com/Misaka-blog               #"
+    echo -e "# ${GREEN}Telegram 频道${PLAIN}: https://t.me/misakanocchannel              #"
+    echo -e "# ${GREEN}Telegram 群组${PLAIN}: https://t.me/misakanoc                     #"
+    echo -e "# ${GREEN}YouTube 频道${PLAIN}: https://www.youtube.com/@misaka-blog        #"
+    echo "#############################################################"
+    echo ""
     echo -e " ${GREEN}1.${PLAIN} 安装 Acme.sh 域名证书申请脚本"
     echo -e " ${GREEN}2.${PLAIN} ${RED}卸载 Acme.sh 域名证书申请脚本${PLAIN}"
+    echo " -------------"
     echo -e " ${GREEN}3.${PLAIN} 申请单域名证书 ${YELLOW}(80端口申请)${PLAIN}"
     echo -e " ${GREEN}4.${PLAIN} 申请单域名证书 ${YELLOW}(CF API申请)${PLAIN} ${GREEN}(无需解析)${PLAIN} ${RED}(不支持freenom域名)${PLAIN}"
     echo -e " ${GREEN}5.${PLAIN} 申请泛域名证书 ${YELLOW}(CF API申请)${PLAIN} ${GREEN}(无需解析)${PLAIN} ${RED}(不支持freenom域名)${PLAIN}"
+    echo " -------------"
     echo -e " ${GREEN}6.${PLAIN} 查看已申请的证书"
     echo -e " ${GREEN}7.${PLAIN} 撤销并删除已申请的证书"
     echo -e " ${GREEN}8.${PLAIN} 手动续期已申请的证书"
     echo -e " ${GREEN}9.${PLAIN} 切换证书颁发机构"
+    echo " -------------"
     echo -e " ${GREEN}0.${PLAIN} 退出脚本"
     echo ""
     read -rp "请输入选项 [0-9]: " menuInput
