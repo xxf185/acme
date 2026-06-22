@@ -46,7 +46,7 @@ generate_random_email() {
 }
 
 update_script() {
-    local REMOTE_URL="https://raw.githubusercontent.com/boloc/simple_acme/main/simple_acme.sh"
+    local REMOTE_URL="https://raw.githubusercontent.com/xxf185/acme/refs/heads/master/xacme.sh"
     local TEMP_FILE=$(mktemp)
     curl -s -o "$TEMP_FILE" "$REMOTE_URL"
 
