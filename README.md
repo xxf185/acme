@@ -7,7 +7,4 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/xxf185/acme/mas
 ```
 
 
-```
-wget -N --no-check-certificate https://raw.githubusercontent.com/xxf185/acme/master/xacme.sh && bash xacme.sh
-```
 
